@@ -1,0 +1,69 @@
+---
+title: "HW6_Instacart"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: row
+runtime: shiny
+---
+
+```{r setup}
+library(flexdashboard)
+library(tidyverse)
+library(janitor)
+library(stringr)
+library(forcats)
+library(viridis)
+library(plotly)
+library(shiny)
+```
+
+
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+```{r load data}
+
+```
+
+```{r  selectInput widget}
+
+```
+
+```{r widget2}
+
+```
+
+```{r widget3}
+
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+renderPlotly({ 
+ 
+})
+```
+
+Row {.tabset .tabset-fade}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+renderPlotly({ 
+ 
+})
+```
+
+### Chart C
+
+```{r}
+renderPlotly({ 
+ 
+})
+```
+
