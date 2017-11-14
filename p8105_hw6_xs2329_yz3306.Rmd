@@ -1,0 +1,90 @@
+---
+title: "p8105_hw6_xs2329_yz3306"
+author: "Xiangyu Shi, Yulan Zhang"
+date: "November 14, 2017"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+
+---
+Collaborators for this project:
+
+Xiangyu Shi (UNI: xs2329 )
+Yulan Zhang (UNI: yz3306)
+
+
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(janitor)
+library(stringr)
+library(forcats)
+library(viridis)
+library(plotly)
+library(shiny)
+```
+
+
+
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+```{r}
+instacart = 
+  read_csv("../data/orders_train_allvars.csv") %>%
+  clean_names() 
+```
+
+### A. Bar graph of most popular product in each deparment
+
+```{r}
+instacart %>%
+    group_by(department, product_name) %>%
+    summarize(orders = n()) %>%
+    group_by(department) %>%
+    summarise(most_popular = product_name[which.max(orders)],
+           orders = max(orders)) %>%
+  plot_ly( x = ~most_popular, y = ~orders, color = ~department, type = "bar") 
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+
+### B Box plot of the hour of the day the order was placed on across department
+
+```{r}
+instacart %>%
+  group_by(department) %>%
+  mutate(iqr_hr_of_day = IQR(order_hour_of_day)) %>% 
+  ungroup(department) %>% 
+  mutate(department = forcats::fct_reorder(department,iqr_hr_of_day)) %>%
+  group_by(department) %>%
+  plot_ly(y = ~order_hour_of_day, color = ~department, type = "box",
+          colors = "Set1")
+
+```
+
+
+-----------------------------------------------------------------------
+
+### C Bar graph number of orders placed during a week in each department
+
+```{r}
+
+  instacart %>% 
+  group_by(department, order_dow) %>%
+  filter(department == c("bakery", "deli", "frozen", "produce")) %>%
+  summarise(orders = n()) %>%
+  mutate(order_dow = as.factor(order_dow)) %>%
+  mutate(order_dow = recode(order_dow,"0" = "sunday", "1" = "monday", "2" = "tuesday", "3" = "wednesday", "4" = "thursday", "5" = "friday", "6" = "saturday")) %>% 
+  plot_ly(y = ~orders, x = ~order_dow, color = ~department, type = "bar",
+          colors = "Set3")
+
+```
+
+
+
+
