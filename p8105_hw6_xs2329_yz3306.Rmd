@@ -70,7 +70,7 @@ instacart %>%
 
 -----------------------------------------------------------------------
 
-### C Bar graph number of orders placed during a week in each department
+### C Bar graph number of orders placed during a week 
 
 ```{r}
 
