@@ -57,13 +57,14 @@ Column {data-width=500}
 
 ```{r}
 instacart %>%
-  group_by(department) %>%
+  group_by(aisle) %>%
   mutate(iqr_hr_of_day = IQR(order_hour_of_day)) %>% 
-  ungroup(department) %>% 
-  mutate(department = forcats::fct_reorder(department,iqr_hr_of_day)) %>%
-  group_by(department) %>%
-  plot_ly(y = ~order_hour_of_day, color = ~department, type = "box",
-          colors = "Set1")
+  ungroup(aisle) %>% 
+  mutate(aisle = forcats::fct_reorder(aisle,iqr_hr_of_day)) %>%
+  group_by(aisle) %>% 
+  filter(department == "produce") %>% 
+  plot_ly(y = ~order_hour_of_day, color = ~aisle, type = "box",
+          colors = "Set2")
 
 ```
 
