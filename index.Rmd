@@ -42,9 +42,9 @@ instacart =
 
 ```{r}
 instacart %>%
-    group_by(department, product_name) %>%
+    group_by(department, order_dow) %>%
     mutate(orders = n()) %>%
-    group_by(department) %>%
+    #group_by(department) %>%
     mutate(most_popular = product_name[which.max(orders)],
            orders = max(orders)) %>%
   plot_ly( x = ~most_popular, y = ~orders, color = ~department, type = "bar") 
