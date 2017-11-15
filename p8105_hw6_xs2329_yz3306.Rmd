@@ -34,7 +34,8 @@ Column {data-width=500}
 ```{r}
 instacart = 
   read_csv("../data/orders_train_allvars.csv") %>%
-  clean_names() 
+  clean_names() %>%
+  filter(department == c("bakery", "deli", "frozen", "produce"))
 ```
 
 ### A. Bar graph of most popular product in each deparment
@@ -42,9 +43,9 @@ instacart =
 ```{r}
 instacart %>%
     group_by(department, product_name) %>%
-    summarize(orders = n()) %>%
+    mutate(orders = n()) %>%
     group_by(department) %>%
-    summarise(most_popular = product_name[which.max(orders)],
+    mutate(most_popular = product_name[which.max(orders)],
            orders = max(orders)) %>%
   plot_ly( x = ~most_popular, y = ~orders, color = ~department, type = "bar") 
 ```
@@ -78,7 +79,8 @@ instacart %>%
   instacart %>% 
   group_by(department, order_dow) %>%
   #filter(department == c("bakery", "deli", "frozen", "produce")) %>%
-  summarise(orders = n()) %>%
+  mutate(orders = n()) %>%
+  ungroup() %>%
   mutate(order_dow = as.factor(order_dow)) %>%
   mutate(order_dow = recode(order_dow,"0" = "sunday", "1" = "monday", "2" = "tuesday", "3" = "wednesday", "4" = "thursday", "5" = "friday", "6" = "saturday")) %>% 
   group_by(order_dow) %>%
