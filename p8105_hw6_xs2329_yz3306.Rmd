@@ -62,7 +62,7 @@ instacart %>%
   ungroup(aisle) %>% 
   mutate(aisle = forcats::fct_reorder(aisle,iqr_hr_of_day)) %>%
   group_by(aisle) %>% 
-  filter(department == "produce") %>% 
+  #filter(department == "produce") %>% 
   plot_ly(y = ~order_hour_of_day, color = ~aisle, type = "box",
           colors = "Set2")
 
@@ -77,10 +77,11 @@ instacart %>%
 
   instacart %>% 
   group_by(department, order_dow) %>%
-  filter(department == c("bakery", "deli", "frozen", "produce")) %>%
+  #filter(department == c("bakery", "deli", "frozen", "produce")) %>%
   summarise(orders = n()) %>%
   mutate(order_dow = as.factor(order_dow)) %>%
   mutate(order_dow = recode(order_dow,"0" = "sunday", "1" = "monday", "2" = "tuesday", "3" = "wednesday", "4" = "thursday", "5" = "friday", "6" = "saturday")) %>% 
+  group_by(order_dow) %>%
   plot_ly(y = ~orders, x = ~order_dow, color = ~department, type = "bar",
           colors = "Set3")
 
