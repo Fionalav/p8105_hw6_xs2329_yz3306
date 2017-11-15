@@ -62,8 +62,8 @@ instacart %>%
   ungroup(aisle) %>% 
   mutate(aisle = forcats::fct_reorder(aisle,iqr_hr_of_day)) %>%
   group_by(aisle) %>% 
-  #filter(department == "produce") %>% 
-  plot_ly(y = ~order_hour_of_day, color = ~aisle, type = "box",
+  #filter(department == c("produce", "frozen")) %>% 
+  plot_ly(y = ~order_hour_of_day, color = ~department, type = "box",
           colors = "Set2")
 
 ```
