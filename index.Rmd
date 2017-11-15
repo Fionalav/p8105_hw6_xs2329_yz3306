@@ -47,7 +47,11 @@ instacart %>%
     #group_by(department) %>%
     mutate(most_popular = product_name[which.max(orders)],
            orders = max(orders)) %>%
-  plot_ly( x = ~most_popular, y = ~orders, color = ~department, type = "bar") 
+    ungroup() %>%
+    mutate(most_popular = fct_reorder(most_popular, orders)) %>%
+    mutate(order_dow = as.factor(order_dow)) %>%
+    mutate(order_dow = recode(order_dow,"0" = "sunday", "1" = "monday", "2" = "tuesday", "3" = "wednesday", "4" = "thursday", "5" = "friday", "6" = "saturday")) %>%
+  plot_ly( x = ~most_popular, y = ~orders, color = ~order_dow, type = "bar") 
 ```
 
 Row {data-width=500}
