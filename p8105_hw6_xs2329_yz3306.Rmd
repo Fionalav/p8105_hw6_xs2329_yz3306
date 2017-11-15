@@ -4,7 +4,7 @@ author: "Xiangyu Shi, Yulan Zhang"
 date: "November 14, 2017"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: row
     vertical_layout: fill
 
 ---
@@ -29,7 +29,7 @@ library(shiny)
 
 
 
-Column {data-width=500}
+Row {data-width=350}
 -----------------------------------------------------------------------
 ```{r}
 instacart = 
@@ -50,7 +50,7 @@ instacart %>%
   plot_ly( x = ~most_popular, y = ~orders, color = ~department, type = "bar") 
 ```
 
-Column {data-width=500}
+Row {data-width=500}
 -----------------------------------------------------------------------
 
 
@@ -68,6 +68,7 @@ instacart %>%
           colors = "Set2")
 
 ```
+
 
 
 -----------------------------------------------------------------------
