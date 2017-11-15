@@ -22,19 +22,33 @@ library(shiny)
 Column {.sidebar}
 -----------------------------------------------------------------------
 ```{r load data}
+instacart = 
+  read_csv("../data/orders_train_allvars.csv") %>%
+  clean_names() 
 
 ```
 
 ```{r  selectInput widget}
-
+#department = instacart %>% distinct(departments) %>% pull()
+department = c("bakery", "deli", "frozen", "produce")
+radioButtons("Department", label = h3("Select Department"),
+            choices = department, selected = "bakery")
 ```
 
-```{r widget2}
-
+```{r widget2, include =F}
+aisles = instacart %>% 
+  filter(department %in% c("bakery", "deli", "frozen", "produce")) %>% 
+  distinct(aisle) %>% pull()
+selectInput("aisle", label = h3("Select Aisle"),
+            choices = aisles, selected = "bakery desserts")
 ```
 
-```{r widget3}
+```{r radioButtons widget3}
+dow = c( "sunday", "monday",  "tuesday", "wednesday",  "thursday",  "friday",  "saturday")
 
+
+radioButtons("day_of_week", label = h3("Select Day of Week"),
+            choices = dow, selected = "sunday")
 ```
 
 Row
@@ -42,9 +56,18 @@ Row
 
 ### Chart A
 
-```{r}
+```{r A Bar graph of most popular product in each deparment}
 renderPlotly({ 
- 
+instacart %>%
+    filter(department %in% c("bakery", "deli", "frozen", "produce")) %>%
+    group_by(department, product_name) %>%
+    mutate(orders = n()) %>%
+    group_by(department) %>%
+    mutate(most_popular = product_name[which.max(orders)],
+           orders = max(orders)) %>%
+  #filter(order_dow == input$day_of_week) %>%
+  plot_ly( x = ~most_popular, y = ~orders, color = ~department, type = "bar")
+  
 })
 ```
 
@@ -53,17 +76,34 @@ Row {.tabset .tabset-fade}
 
 ### Chart B
 
-```{r}
+```{r B Box plot of the hour of the day the order was placed on across department}
 renderPlotly({ 
- 
+ instacart %>%
+  group_by(aisle) %>%
+  mutate(iqr_hr_of_day = IQR(order_hour_of_day)) %>% 
+  ungroup(aisle) %>% 
+  mutate(aisle = forcats::fct_reorder(aisle,iqr_hr_of_day)) %>%
+  group_by(aisle) %>% 
+  filter(department == input$Department) %>%
+  plot_ly(y = ~order_hour_of_day, color = ~aisle, type = "box",
+          colors = "Set2")
+
 })
 ```
 
 ### Chart C
 
-```{r}
+```{r C Bar graph number of orders placed during a week}
 renderPlotly({ 
- 
+ instacart %>% 
+  group_by(department, order_dow) %>%
+  mutate(orders = n()) %>%
+    ungroup(order_dow) %>%
+  mutate(order_dow = as.factor(order_dow)) %>%
+  mutate(order_dow = recode(order_dow,"0" = "sunday", "1" = "monday", "2" = "tuesday", "3" = "wednesday", "4" = "thursday", "5" = "friday", "6" = "saturday")) %>% 
+  filter(order_dow == input$day_of_week) %>%
+  plot_ly(y = ~orders, x = ~order_dow, color = ~department, type = "bar",
+          colors = "Set3")
 })
 ```
 
