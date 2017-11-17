@@ -51,7 +51,10 @@ instacart %>%
     mutate(most_popular = fct_reorder(most_popular, orders)) %>%
     mutate(order_dow = as.factor(order_dow)) %>%
     mutate(order_dow = recode(order_dow,"0" = "sunday", "1" = "monday", "2" = "tuesday", "3" = "wednesday", "4" = "thursday", "5" = "friday", "6" = "saturday")) %>%
-  plot_ly( x = ~most_popular, y = ~orders, color = ~order_dow, type = "bar") 
+  plot_ly( x = ~most_popular, y = ~orders, color = ~order_dow, type = "bar") %>%
+  layout(xaxis = list(title = 'most popular product',
+                      zeroline = TRUE),
+         yaxis = list(title = 'number of orders'))
 ```
 
 Row {data-width=500}
@@ -69,7 +72,11 @@ instacart %>%
   group_by(aisle) %>% 
   #filter(department == c("produce", "frozen")) %>% 
   plot_ly(y = ~order_hour_of_day, color = ~department, type = "box",
-          colors = "Set2")
+          colors = "Set2") %>%
+  layout(yaxis = list(title = 'hour of the day the order was placed',
+                      zeroline = TRUE),
+         xaxis = list(title = 'department',
+                      zeroline = TRUE))
 
 ```
 
@@ -90,7 +97,11 @@ instacart %>%
   mutate(order_dow = recode(order_dow,"0" = "sunday", "1" = "monday", "2" = "tuesday", "3" = "wednesday", "4" = "thursday", "5" = "friday", "6" = "saturday")) %>% 
   group_by(order_dow) %>%
   plot_ly(y = ~orders, x = ~order_dow, color = ~department, type = "bar",
-          colors = "Set3")
+          colors = "Set3")%>%
+   layout(xaxis = list(title = 'day of the week the order was placed',
+                      zeroline = TRUE),
+         yaxis = list(title = 'department',
+                      zeroline = TRUE))
 
 ```
 
